@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Boda - Invitación</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      background: #fff8f0;
+      color: #333;
+    }
+    h2 {
+      color: #b85c38;
+    }
+    /* Galería */
+    .galeria-grid {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .galeria-grid img {
+      width: 150px;
+      cursor: pointer;
+      border-radius: 5px;
+      box-shadow: 0 2px 6px rgba(184, 92, 56, 0.4);
+      transition: transform 0.2s ease;
+    }
+    .galeria-grid img:hover {
+      transform: scale(1.05);
+    }
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 10;
+      left: 0; top: 0;
+      width: 100%; height: 100%;
+      background-color: rgba(0,0,0,0.8);
+      justify-content: center;
+      align-items: center;
+    }
+    .modal-contenido {
+      max-width: 80%;
+      max-height: 80%;
+      border-radius: 8px;
+    }
+    .cerrar {
+      position: absolute;
+      top: 20px; right: 40px;
+      color: white;
+      font-size: 40px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    /* Formulario RSVP */
+    form {
+      max-width: 400px;
+      background: #ffe9d6;
+      padding: 15px 20px;
+      border-radius: 10px;
+      box-shadow: 0 2px 6px rgba(184, 92, 56, 0.3);
+    }
+    label {
+      font-weight: bold;
+    }
+    input[type="text"], input[type="email"], textarea {
+      width: 100%;
+      padding: 7px;
+      margin-top: 4px;
+      margin-bottom: 12px;
+      border: 1px solid #b85c38;
+      border-radius: 4px;
+      font-size: 1em;
+    }
+    button {
+      background-color: #b85c38;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      cursor: pointer;
+      border-radius: 6px;
+      font-size: 1em;
+      transition: background-color 0.3s ease;
+    }
+    button:hover {
+      background-color: #953f24;
+    }
+    #respuesta {
+      margin-top: 10px;
+      font-weight: bold;
+      color: green;
+    }
+    /* Mapa */
+    iframe {
+      max-width: 100%;
+      border: none;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(184, 92, 56, 0.4);
+    }
+    /* Cuenta regresiva */
+    #contador {
+      font-size: 1.8em;
+      font-weight: bold;
+      color: #b85c38;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>¡Estás invitado a nuestra boda!</h1>
+
+  <!-- Fotos y galerías -->
+  <section id="galeria">
+    <h2>Galería de Fotos</h2>
+    <div class="galeria-grid">
+      <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=150&q=80" alt="Foto 1" onclick="abrirModal(this.src)">
+      <img src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=150&q=80" alt="Foto 2" onclick="abrirModal(this.src)">
+      <img src="https://images.unsplash.com/photo-1517502166878-35c93a0072bb?auto=format&fit=crop&w=150&q=80" alt="Foto 3" onclick="abrirModal(this.src)">
+    </div>
+
+    <!-- Modal -->
+    <div id="modalGaleria" class="modal" onclick="cerrarModal()">
+      <span class="cerrar">&times;</span>
+      <img class="modal-contenido" id="imgModal" />
+    </div>
+  </section>
+
+  <!-- Formulario RSVP -->
+  <section id="rsvp">
+    <h2>Confirmar asistencia (RSVP)</h2>
+    <form id="formRsvp" onsubmit="return enviarRSVP(event)">
+      <label for="nombre">Nombre:</label><br>
+      <input type="text" id="nombre" name="nombre" required /><br />
+
+      <label for="email">Correo electrónico:</label><br>
+      <input type="email" id="email" name="email" required /><br />
+
+      <label>¿Asistirás?</label><br />
+      <input type="radio" id="si" name="asistencia" value="Sí" required />
+      <label for="si">Sí</label><br />
+      <input type="radio" id="no" name="asistencia" value="No" required />
+      <label for="no">No</label><br />
+
+      <label for="mensaje">Mensaje (opcional):</label><br />
+      <textarea id="mensaje" name="mensaje" rows="3"></textarea><br />
+
+      <button type="submit">Enviar RSVP</button>
+    </form>
+    <p id="respuesta"></p>
+  </section>
+
+  <!-- Mapa de ubicación -->
+  <section id="ubicacion">
+    <h2>Ubicación del Evento</h2>
+    <iframe
+      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3162.123456789012!2d-122.08424968469287!3d37.42206597982559!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x808fb5a0c1234567%3A0xabcdef1234567890!2sGoogleplex!5e0!3m2!1ses!2smx!4v1629389485960!5m2!1ses!2smx"
+      width="600"
+      height="450"
+      allowfullscreen=""
+      loading="lazy"
+    ></iframe>
+  </section>
+
+  <!-- Cuenta regresiva -->
+  <section id="cuenta-regresiva">
+    <h2>Cuenta regresiva para la boda</h2>
+    <div id="contador"></div>
+  </section>
+
+  <script>
+    // Galería modal
+    function abrirModal(src) {
+      document.getElementById("modalGaleria").style.display = "flex";
+      document.getElementById("imgModal").src = src;
+    }
+    function cerrarModal() {
+      document.getElementById("modalGaleria").style.display = "none";
+    }
+
+    // Enviar RSVP (simulado)
+    function enviarRSVP(event) {
+      event.preventDefault();
+      document.getElementById("respuesta").textContent =
+        "¡Gracias por confirmar tu asistencia!";
+      event.target.reset();
+      return false;
+    }
+
+    // Cuenta regresiva
+    const fechaEvento = new Date("2025-09-01T18:00:00").getTime();
+
+    const intervalo = setInterval(() => {
+      const ahora = new Date().getTime();
+      const distancia = fechaEvento - ahora;
+
+      if (distancia < 0) {
+        clearInterval(intervalo);
+        document.getElementById("contador").innerHTML = "¡El evento ha comenzado!";
+        return;
+      }
+
+      const dias = Math.floor(distancia / (1000 * 60 * 60 * 24));
+      const horas = Math.floor(
+        (distancia % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+      );
+      const minutos = Math.floor((distancia % (1000 * 60 * 60)) / (1000 * 60));
+      const segundos = Math.floor((distancia % (1000 * 60)) / 1000);
+
+      document.getElementById(
+        "contador"
+      ).innerHTML = `${dias}d ${horas}h ${minutos}m ${segundos}s`;
+    }, 1000);
+  </script>
+</body>
+</html>
